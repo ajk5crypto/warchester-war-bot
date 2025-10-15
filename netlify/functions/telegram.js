@@ -1,6 +1,10 @@
 // Telegram "I Declare War" — 3 or 5 players, 10 cards each.
 // Commands: /start, /war3, /war5
 exports.handler = async (event) => {
+  // ✅ Add this so opening the URL in a browser shows a message
+  if (event.httpMethod === "GET") {
+    return { statusCode: 200, body: "Warchester bot is live. Webhook expects POST from Telegram." };
+  }
   try {
     if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method Not Allowed" };
 
