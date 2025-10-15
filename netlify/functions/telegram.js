@@ -1,6 +1,7 @@
 // Telegram "I Declare War" — 3 or 5 players, 10 cards each.
 // Commands: /start, /war3, /war5
 exports.handler = async (event) => {
+    console.log("Incoming event:", event.httpMethod, event.body);
   // ✅ Add this so opening the URL in a browser shows a message
   if (event.httpMethod === "GET") {
     return { statusCode: 200, body: "Warchester bot is live. Webhook expects POST from Telegram." };
@@ -58,9 +59,10 @@ Tie = WAR: tied players burn one card and flip the next until someone wins.`,
     await api("sendMessage", { chat_id, text: "Try /war3 or /war5" });
     return ok();
   } catch (e) {
-    console.error(e);
-    return ok(); // Always 200 so Telegram doesn't retry
-  }
+  console.error("Error in telegram function:", e && (e.stack || e.message || e));
+  // Return 200 so Telegram doesn't retry forever, but make it obvious in logs
+  return { statusCode: 200, body: "Error logged" };
+}
 };
 
 // ===== Game engine =====
